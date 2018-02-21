@@ -1,3 +1,10 @@
+######################################################################
+# Auteur : Obossou Ema-Wo, Billy Bouchard, Gnaga Dogbeda Georges
+# Matricule: 1780896, 1850477, 1870143
+# Version Python: 3.6
+######################################################################
+
+
 class Node:
     def __init__(self, id, hasStation):
         self.station = hasStation
@@ -18,7 +25,7 @@ class Arc:
         node2 << self
 
     def __str__(self):
-        return "(" + str(self.node1.id) + "--" + str(self.time) + "--" + str(self.node2.id) + ")"
+        return "(" + str(self.node1.id) + "--" + str(self.node2.id) + " :" + str(self.time) + ")"
 
 
 class Graph:
@@ -34,17 +41,60 @@ class Graph:
             self.arcs.append(elem)
         return self
 
+    def __getitem__(self, id):
+        for node in self.node:
+            if node.id == id:
+                return node
+        return False
 
-a = Node(1, True)
-b = Node(2, False)
-c = Node(3, True)
 
-ab = Arc(7, a, b)
-ac = Arc(4, a, c)
+def creerGraph(nomFichier):
+    graph = Graph()
+    fichier = open(nomFichier, "r")
+    line = fichier.readline()
+    while line != '\n':
+        firstNumber = True
+        nodeid = ""
+        hasStation = ""
+        for char in line:
+            if char == ",":
+                firstNumber = False
+                continue
+            if firstNumber:
+                nodeid += char
+            if not(firstNumber):
+                hasStation += char
+        nodeid = int(nodeid)
+        hasStation = hasStation == '1\n'
+        node = Node(nodeid, hasStation)
+        graph << node
+        line = fichier.readline()
+    line = fichier.readline()
+    while line != '':
+        node1 = ""
+        node2 = ""
+        time = ""
+        current = 0
+        for char in line:
+            if char == ',':
+                current += 1
+                continue
+            elif current == 0:
+                node1 += char
+            elif current == 1:
+                node2 += char
+            elif current == 2:
+                time += char
+        node1 = int(node1)
+        node2 = int(node2)
+        time = int(time)
 
-g = Graph()
+        arc = Arc(time, graph[node1], graph[node2])
+        graph << arc
+        line = fichier.readline()
+    return graph
 
-g << a << b << ab
 
-print(g.arcs)
-print(a)
+g = creerGraph("villes.txt")
+for node in g.node:
+    print(node)
