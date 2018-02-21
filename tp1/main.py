@@ -95,6 +95,21 @@ def creerGraph(nomFichier):
     return graph
 
 
+def lireGraph(graph):
+    text = ''
+    for node in graph.node:
+        text += '(noeud, ' + str(node.id) + ', ('
+        i = False
+        for arc in node.arcs:
+            if i == True:
+                text += ', '
+            else:
+                i = True
+            text += "(" + str(arc.node1.id if arc.node1.id !=
+                              node.id else arc.node2.id) + ', ' + str(arc.time) + ')'
+        text += '))\n'
+    print(text)
+
+
 g = creerGraph("villes.txt")
-for node in g.node:
-    print(node)
+lireGraph(g)
