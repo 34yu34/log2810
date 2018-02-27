@@ -7,6 +7,7 @@ from graph import Graph
 from graph import Node
 from graph import Arc
 from djikstra import djikstra
+import re
 
 
 def readNodeLine(line):
@@ -110,8 +111,11 @@ def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
             if solution == []:
                 return "ne pas faire le braquage"
     solution = map(lambda x: str(x.id) + "->", solution)
-    answer = "il faut passer par : " + reduce(lambda x, y: x + y, solution)
-    answer += "avec un " + vehiculeType + " de " + company
+    answer = "il faut passer par : \n\t\t" + \
+        reduce(lambda x, y: x + y, solution)
+    answer = re.sub(r'->$', '', answer)
+    answer += "\navec" + (" une " if vehiculeType == "voiture" else " un ") + \
+        vehiculeType + " de " + company
     return answer
 
 
