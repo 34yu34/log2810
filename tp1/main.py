@@ -3,64 +3,10 @@
 # Matricule: 1780896, 1850477, 1870143
 # Version Python: 3.6
 ######################################################################
-
-
-class Node:
-    def __init__(self, id, hasStation):
-        self.station = hasStation
-        self.arcs = []
-        self.id = id
-
-    def __lshift__(self, arc):
-        ######################################################################
-        # Operator << overloading to add item to the graph
-        # return self is for cascade
-        ######################################################################
-        self.arcs.append(arc)
-        return self
-
-    def __str__(self):
-        ######################################################################
-        # Overload the str function for printing
-        ######################################################################
-        return str(self.id) + ". " + str(self.station) + ": " + reduce(lambda x, y: x + ", " + y, map(lambda x: str(x), self.arcs))
-
-
-class Arc:
-    def __init__(self, time, node1, node2):
-        self.time, self.node1, self.node2 = time, node1, node2
-        node1 << self
-        node2 << self
-
-    def __str__(self):
-        ######################################################################
-        # Overload the str function for printing
-        ######################################################################
-        return "(" + str(self.node1.id) + "--" + str(self.node2.id) + " :" + str(self.time) + ")"
-
-
-class Graph:
-    def __init__(self):
-        self.arcs = []
-        self.node = {}
-        self.current_node = 0
-
-    def __lshift__(self, elem):
-        ######################################################################
-        # Add << operator to add arc or node to their respective array
-        # self return is for cascade
-        ######################################################################
-        if isinstance(elem, Node):
-            self.node[elem.id] = elem
-        elif isinstance(elem, Arc):
-            self.arcs.append(elem)
-        return self
-
-    def __getitem__(self, nodeId):
-        ######################################################################
-        # return a node from a node id
-        ######################################################################
-        return self.node[nodeId]
+from graph import Graph
+from graph import Node
+from graph import Arc
+from djikstra import djikstra
 
 
 def readNodeLine(line):
@@ -89,23 +35,16 @@ def readArcLine(line, graph):
     # this function read a line of format : "1,4,7\n" and return an arc
     # object out of it. It needs a group of preexisting node to work
     ######################################################################
-    node1 = ""
-    node2 = ""
-    time = ""
+    variables = ["", "", ""]
     current = 0
     for char in line:
         if char == ',':
             current += 1
             continue
-        elif current == 0:
-            node1 += char
-        elif current == 1:
-            node2 += char
-        elif current == 2:
-            time += char
-    node1 = int(node1)
-    node2 = int(node2)
-    time = int(time)
+        variables[current] += char
+    node1 = int(variables[0])
+    node2 = int(variables[1])
+    time = int(variables[2])
     return Arc(time, graph[node1], graph[node2])
 
 
@@ -131,7 +70,7 @@ def lireGraph(graph):
     # This function print a formated string to look like the graph
     ######################################################################
     text = ''
-    for nodeId, node in graph.node.items():
+    for nodeId, node in graph.nodes.items():
         text += '(noeud, ' + str(nodeId) + ', ('
         i = False
         for arc in node.arcs:
@@ -145,5 +84,36 @@ def lireGraph(graph):
     print(text)
 
 
+def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
+    if vehiculeType == "voiture":
+        solution = djikstra(graph, startNodeId, endNodeId, 5)
+        company = "Cheap Car"
+        if solution == []:
+            solution = djikstra(graph, startNodeId, endNodeId, 3)
+            company = "Super Car"
+            if solution == []:
+                return "ne pas faire le braquage"
+    if vehiculeType == "pick-up":
+        solution = djikstra(graph, startNodeId, endNodeId, 7)
+        company = "Cheap Car"
+        if solution == []:
+            solution = djikstra(graph, startNodeId, endNodeId, 4)
+            company = "Super Car"
+            if solution == []:
+                return "ne pas faire le braquage"
+    if vehiculeType == "fourgon":
+        solution = djikstra(graph, startNodeId, endNodeId, 8)
+        company = "Cheap Car"
+        if solution == []:
+            solution = djikstra(graph, startNodeId, endNodeId, 6)
+            company = "Super Car"
+            if solution == []:
+                return "ne pas faire le braquage"
+    solution = map(lambda x: str(x.id) + "->", solution)
+    answer = "il faut passer par : " + reduce(lambda x, y: x + y, solution)
+    answer += "avec un " + vehiculeType + " de " + company
+    return answer
+
+
 g = creerGraph("villes.txt")
-lireGraph(g)
+print(plusCourtChemin(g, 1, 15, "voiture"))
