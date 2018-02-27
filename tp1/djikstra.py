@@ -76,10 +76,8 @@ def djikstra(graph, startNodeId, endNodeId, fuelConsuption):
         if currentNode.station:
             if currentNodeType == "weight":
                 nodes[currentNode].fuel = 100
-                nodes[currentNode].weight += 15
             else:
                 nodes[currentNode].fuelNodeFuel = 100
-                nodes[currentNode].fuelNodeWeight += 15
     return getSolution(nodes, currentNode, currentNodeType)
 
 
@@ -143,6 +141,8 @@ def updateNodes(nodes, currentNode, currentNodeType, endNode, fuelConsuption):
             weight = MAX
         elif nodeFuel < 12 and (node != endNode) and not (node.station):
             weight = MAX
+        if node.station:
+            weight += 15
         if not(nodes[node].fuelNodeVisited) and (nodeFuel >= nodes[node].fuelNodeFuel) and (weight <= nodes[node].fuelNodeWeight):
             nodes[node].fuelNodeWeight = weight
             nodes[node].fuelNodeAncientNode = currentNode

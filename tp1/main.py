@@ -120,4 +120,4 @@ def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
 
 
 g = creerGraph("villes.txt")
-print(plusCourtChemin(g, 1, 15, "voiture"))
+print(plusCourtChemin(g, 13, 2, "voiture"))
