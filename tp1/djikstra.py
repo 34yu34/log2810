@@ -1,7 +1,16 @@
+######################################################################
+# Auteur : Obossou Ema-Wo, Billy Bouchard, Gnaga Dogbeda Georges
+# Matricule: 1780896, 1850477, 1870143
+# Version Python: 3.6
+######################################################################
 MAX = 100000
 
 
 class DjikstraNode:
+    ######################################################################
+    # Custom made class to have every properties necessary in order
+    # to make djikstra function work easily
+    ######################################################################
     def __init__(self, node, startNode):
         self.node = node
         # if a node contains more fuel it is kept
@@ -49,6 +58,10 @@ class DjikstraNode:
 
 
 def djikstra(graph, startNodeId, endNodeId, fuelConsuption):
+    ######################################################################
+    # Algorith tht find the smallest path through a graph givn
+    # a certain fuel consuption between startNodeId and endNodeId
+    ######################################################################
     endNode = graph[endNodeId]
     nodes = {}
     for node in graph:
@@ -71,6 +84,10 @@ def djikstra(graph, startNodeId, endNodeId, fuelConsuption):
 
 
 def selectNextNode(nodes):
+    ######################################################################
+    # This function select the next smallest weight node and returns
+    # its type
+    ######################################################################
     smallest = MAX
     smallestNode = None
     smallestNodeType = "weight"
@@ -86,37 +103,45 @@ def selectNextNode(nodes):
     return smallestNode, smallestNodeType
 
 
-def getSolution(nodes, currentNode, currentNodeType):
+def getSolution(nodes, endNode, endNodeType):
+    ######################################################################
+    # Functions take the nodes dictionnary and retrun the way to get to
+    # the end node from the start node in a list
+    ######################################################################
     solution = []
-    if not(currentNode):
+    if not(endNode):
         return []
-    node = nodes[currentNode]
+    node = nodes[endNode]
     while True:
         solution.append(node.node)
-        if currentNodeType == "weight":
+        if endNodeType == "weight":
             if not(node.ancientNode):
                 break
             node = nodes[node.ancientNode]
-            currentNodeType = node.ancientNodeType
+            endNodeType = node.ancientNodeType
         else:
             if not(node.fuelNodeAncientNode):
                 break
             node = node.fuelNodeAncientNode
-            currentNodeType = node.fuelNodeAncientNodeType
+            endNodeType = node.fuelNodeAncientNodeType
     solution.reverse()
     return solution
 
 
 def updateNodes(nodes, currentNode, currentNodeType, endNode, fuelConsuption):
+    ######################################################################
+    # This function update the nodes from the current node
+    # it modify the weight of every node connecting to it
+    ######################################################################
     nodesTime = currentNode.link()
     for node in nodesTime:
         weight = nodesTime[node] * 60 + \
             nodes[currentNode].getWeight(currentNodeType)
         nodeFuel = nodes[currentNode].getFuel(currentNodeType) - \
             nodesTime[node] * fuelConsuption
-        if nodeFuel < 12 and (node != endNode) and not (node.station):
-            weight = MAX
         if nodeFuel < 0:
+            weight = MAX
+        elif nodeFuel < 12 and (node != endNode) and not (node.station):
             weight = MAX
         if not(nodes[node].fuelNodeVisited) and (nodeFuel >= nodes[node].fuelNodeFuel) and (weight <= nodes[node].fuelNodeWeight):
             nodes[node].fuelNodeWeight = weight

@@ -1,3 +1,10 @@
+######################################################################
+# Auteur : Obossou Ema-Wo, Billy Bouchard, Gnaga Dogbeda Georges
+# Matricule: 1780896, 1850477, 1870143
+# Version Python: 3.6
+######################################################################
+
+
 class Node:
     def __init__(self, id, hasStation):
         self.station = hasStation
@@ -14,13 +21,14 @@ class Node:
 
     def __str__(self):
         ######################################################################
-        # Overload the str function for printing
+        # Overload the str() function for printing
         ######################################################################
         return str(self.id) + ". " + str(self.station) + ": " + reduce(lambda x, y: x + ", " + y, map(lambda x: str(x), self.arcs))
 
     def __hash__(self):
         ######################################################################
-        # Hash the id because its unique
+        # Hash the id because its unique so that a node can be a dictionnary
+        # key
         ######################################################################
         return hash(self.id)
 
@@ -49,14 +57,14 @@ class Arc:
 
     def __str__(self):
         ######################################################################
-        # Overload the str function for printing
+        # Overload the str() function for printing
         ######################################################################
         return "(" + str(self.node1.id) + "--" + str(self.node2.id) + " :" + str(self.time) + ")"
 
     def __getitem__(self, node):
         ######################################################################
-        # Return the other node than the one given
-        # else return none
+        # Return the other node than the one given with [] operator
+        # else return None
         ######################################################################
         if node != self.node1 and node != self.node2:
             return None
@@ -82,21 +90,22 @@ class Graph:
 
     def __getitem__(self, nodeId):
         ######################################################################
-        # return a node from a node id
+        # return a node from a node id with [] operator
         ######################################################################
         return self.nodes[nodeId]
 
     def __iter__(self):
         ######################################################################
-        # let us iterate trough nodes
+        # let us iterate trough nodes with 'for in' opertator
         ######################################################################
         for nodeId in self.nodes:
             yield self.nodes[nodeId]
 
     def findArcTime(self, node1, node2):
         ######################################################################
-        # Return a
+        # Return the time to get from node1 to node2 if both are connected
         ######################################################################
         for arc in self.arcs:
             if (arc.node1 == node1 or arc.node2 == node1) and (arc.node1 == node2 or arc.node2 == node2):
                 return arc.time
+        return None
