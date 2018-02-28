@@ -86,6 +86,10 @@ def lireGraph(graph):
 
 
 def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
+    ######################################################################
+    # Algorithm to select the best company and if the stealing
+    # should be done
+    ######################################################################
     if vehiculeType == "voiture":
         solution = djikstra(graph, startNodeId, endNodeId, 5)
         company = "Cheap Car"
