@@ -8,7 +8,7 @@ from graph import Node
 from graph import Arc
 from djikstra import djikstra
 import re
-
+from six.moves import reduce
 
 def readNodeLine(line):
     ######################################################################
