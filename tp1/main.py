@@ -7,7 +7,7 @@ from graph import Graph
 from graph import Node
 from graph import Arc
 from djikstra import djikstra
-
+from six.moves import reduce
 
 def readNodeLine(line):
     ######################################################################
@@ -117,3 +117,5 @@ def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
 
 g = creerGraph("villes.txt")
 print(plusCourtChemin(g, 1, 15, "voiture"))
+
+list
