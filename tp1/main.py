@@ -7,7 +7,8 @@ from graph import Graph
 from graph import Node
 from graph import Arc
 from djikstra import djikstra
-from six.moves import reduce
+import re
+
 
 def readNodeLine(line):
     ######################################################################
@@ -85,6 +86,10 @@ def lireGraph(graph):
 
 
 def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
+    ######################################################################
+    # Algorithm to select the best company and if the stealing
+    # should be done
+    ######################################################################
     if vehiculeType == "voiture":
         solution = djikstra(graph, startNodeId, endNodeId, 5)
         company = "Cheap Car"
@@ -110,12 +115,13 @@ def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
             if solution == []:
                 return "ne pas faire le braquage"
     solution = map(lambda x: str(x.id) + "->", solution)
-    answer = "il faut passer par : " + reduce(lambda x, y: x + y, solution)
-    answer += "avec un " + vehiculeType + " de " + company
+    answer = "il faut passer par : \n\t\t" + \
+        reduce(lambda x, y: x + y, solution)
+    answer = re.sub(r'->$', '', answer)
+    answer += "\navec" + (" une " if vehiculeType == "voiture" else " un ") + \
+        vehiculeType + " de " + company
     return answer
 
 
 g = creerGraph("villes.txt")
-print(plusCourtChemin(g, 1, 15, "voiture"))
-
-list
+print(plusCourtChemin(g, 1, 3, "pick-up"))
