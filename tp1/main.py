@@ -9,6 +9,7 @@ from graph import Arc
 from djikstra import djikstra
 import re
 from six.moves import reduce
+from six.moves import input
 
 def readNodeLine(line):
     ######################################################################
@@ -123,5 +124,62 @@ def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
     return answer
 
 
-g = creerGraph("villes.txt")
-print(plusCourtChemin(g, 1, 3, "pick-up"))
+choice = None 
+g = None
+depart = None
+arrive = None
+nomFichier= None
+typeVehicule =None
+
+while True:
+    #g = creerGraph("villes.txt")
+    #print(plusCourtChemin(g, 1, 3, "pick-up"))
+
+    
+    print(" veillez choisir svp le menu que vous voulez excecuter\n ")
+    print("Entrez 1 pour la MisAJourCarte")
+    print("Entrez 2 pour CourtCheminSecuritaire")
+    print("Entrez 0 pour. Quitter")
+    choice = input(" >>  ")
+    if choice != "1":
+        print( " \n****choix invalide svp entrez un choix valide**\n")
+    if choice == "1" :
+        print(choice)
+        print(" entrez le nom du fichier de la carte")
+        nomFichier = input(" >>  ")
+        g = creerGraph(nomFichier)
+        #return "ok "
+        print("\nEntrez 2 pour CourtCheminSecuritaire")
+        print("Entrez 0 pour. Quitter")
+        choice1 = input(" >>  ")
+        if choice1 != 0 or choice1 != 2 :
+            print(" ****** Données entrées invalides ******* ")
+        if choice1 == "2" :
+            print("nombre " + choice)
+            print("Entrez le point du lieu de braquaque (point) ")
+            depart = input(" >>  ")
+            print("Entrez le point de destination apres le braquage ")
+            arrive = input(" >>  ")
+            print("Entrez le type de vehicule a utiliser pour le braquage ")
+            typeVehicule = input(" >>  ")
+            print(plusCourtChemin(g, depart, arrive, typeVehicule))
+        # return "ok "
+            
+        if choice1 == "0" :
+            print(choice)
+            print("\n Quitter")
+            #return"ok "
+
+  #*  os.system('clear')
+   # ch = choice.lower()
+   # if ch == '':
+    #    menu_actions['main_menu']()
+    #else:
+     #   try:
+      #      menu_actions[ch]()
+       # except KeyError:
+        #    print(" selection invalide, veillez rechoisir svp .\n")
+         #  
+    #return*/
+
+   
