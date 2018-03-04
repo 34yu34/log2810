@@ -123,6 +123,8 @@ def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
         vehiculeType + " de " + company
     return answer
 
+#g = creerGraph("villes.txt")
+#print(plusCourtChemin(g, 1, 20, "pick-up"))
 
 choice = None 
 g = None
@@ -132,10 +134,8 @@ nomFichier= None
 typeVehicule =None
 
 while True:
-    #g = creerGraph("villes.txt")
-    #print(plusCourtChemin(g, 1, 3, "pick-up"))
-
-    
+    g = creerGraph("villes.txt")
+    print(plusCourtChemin(g, 1, 3, "pick-up"))
     print(" veillez choisir svp le menu que vous voulez excecuter\n ")
     print("Entrez 1 pour la MisAJourCarte")
     print("Entrez 2 pour CourtCheminSecuritaire")
@@ -152,7 +152,7 @@ while True:
         print("\nEntrez 2 pour CourtCheminSecuritaire")
         print("Entrez 0 pour. Quitter")
         choice1 = input(" >>  ")
-        if choice1 != 0 or choice1 != 2 :
+        if choice1 != "0" or choice1 != "2":
             print(" ****** Données entrées invalides ******* ")
         if choice1 == "2" :
             print("nombre " + choice)
@@ -181,5 +181,3 @@ while True:
         #    print(" selection invalide, veillez rechoisir svp .\n")
          #  
     #return*/
-
-   
