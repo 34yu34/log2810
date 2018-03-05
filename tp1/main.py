@@ -1,15 +1,18 @@
 ######################################################################
-# Auteur : Obossou Ema-Wo, Billy Bouchard, Gnaga Dogbeda Georges
-# Matricule: 1780896, 1850477, 1870143
-# Version Python: 3.6
+# Auteurs  : Sanyan Obossou Ema-Wo  -  1780896
+#            Billy Bouchard         -  1850477
+#            Gnaga Dogbeda Georges  -  1870143
+# Version Python: 3.6 (32-bits)
 ######################################################################
 from graph import Graph
 from graph import Node
 from graph import Arc
 from djikstra import djikstra
 import re
+import os.path
 from six.moves import reduce
 from six.moves import input
+
 
 def readNodeLine(line):
     ######################################################################
@@ -71,6 +74,8 @@ def lireGraph(graph):
     ######################################################################
     # This function print a formated string to look like the graph
     ######################################################################
+    print("")
+    print(20 * "=", "  AFFICHAGE DU GRAPHE DE LA CARTE  ", 20 * "=")
     text = ''
     for nodeId, node in graph.nodes.items():
         text += '(noeud, ' + str(nodeId) + ', ('
@@ -91,6 +96,9 @@ def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
     # Algorithm to select the best company and if the stealing
     # should be done
     ######################################################################
+    print("")
+    print(10 * "=", " RESULTAT DU PLUS COURT CHEMIN SECURITAIRE OBTENU ", 10 * "=")
+
     if vehiculeType == "voiture":
         solution = djikstra(graph, startNodeId, endNodeId, 5)
         company = "Cheap Car"
@@ -99,7 +107,7 @@ def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
             company = "Super Car"
             if solution == []:
                 return "ne pas faire le braquage"
-    if vehiculeType == "pick-up":
+    elif vehiculeType == "pick-up":
         solution = djikstra(graph, startNodeId, endNodeId, 7)
         company = "Cheap Car"
         if solution == []:
@@ -107,7 +115,7 @@ def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
             company = "Super Car"
             if solution == []:
                 return "ne pas faire le braquage"
-    if vehiculeType == "fourgon":
+    elif vehiculeType == "fourgon":
         solution = djikstra(graph, startNodeId, endNodeId, 8)
         company = "Cheap Car"
         if solution == []:
@@ -123,61 +131,128 @@ def plusCourtChemin(graph, startNodeId, endNodeId, vehiculeType):
         vehiculeType + " de " + company
     return answer
 
-#g = creerGraph("villes.txt")
-#print(plusCourtChemin(g, 1, 20, "pick-up"))
 
-choice = None 
-g = None
-depart = None
-arrive = None
-nomFichier= None
-typeVehicule =None
+# Text menu to be printed.
+def printMenu():
+    print("")
+    print(35 * "-", "MENU", 35 * "-")
+    print("Choisir l'option à excecuter : \n ")
+    print("\t 1 pour Mettre à jour la carte")
+    print("\t 2 pour Déterminer le plus court chemin sécuritaire")
+    print("\t 3 pour Quitter")
+    print(76 * "-")
 
-while True:
-    g = creerGraph("villes.txt")
-    print(plusCourtChemin(g, 1, 3, "pick-up"))
-    print(" veillez choisir svp le menu que vous voulez excecuter\n ")
-    print("Entrez 1 pour la MisAJourCarte")
-    print("Entrez 2 pour CourtCheminSecuritaire")
-    print("Entrez 0 pour. Quitter")
-    choice = input(" >>  ")
-    if choice != "1":
-        print( " \n****choix invalide svp entrez un choix valide**\n")
-    if choice == "1" :
-        print(choice)
-        print(" entrez le nom du fichier de la carte")
-        nomFichier = input(" >>  ")
-        g = creerGraph(nomFichier)
-        #return "ok "
-        print("\nEntrez 2 pour CourtCheminSecuritaire")
-        print("Entrez 0 pour. Quitter")
-        choice1 = input(" >>  ")
-        if choice1 != "0" or choice1 != "2":
-            print(" ****** Données entrées invalides ******* ")
-        if choice1 == "2" :
-            print("nombre " + choice)
-            print("Entrez le point du lieu de braquaque (point) ")
-            depart = input(" >>  ")
-            print("Entrez le point de destination apres le braquage ")
-            arrive = input(" >>  ")
-            print("Entrez le type de vehicule a utiliser pour le braquage ")
-            typeVehicule = input(" >>  ")
-            print(plusCourtChemin(g, depart, arrive, typeVehicule))
-        # return "ok "
-            
-        if choice1 == "0" :
-            print(choice)
-            print("\n Quitter")
-            #return"ok "
 
-  #*  os.system('clear')
-   # ch = choice.lower()
-   # if ch == '':
-    #    menu_actions['main_menu']()
-    #else:
-     #   try:
-      #      menu_actions[ch]()
-       # except KeyError:
-        #    print(" selection invalide, veillez rechoisir svp .\n")
-         #  
-    #return*/
+# List of towns to be printed.
+def printTowns():
+    print("\nListe des villes canadiennes accessibles :")
+    print("1 - Montréal         11 - Saskatoon ")
+    print("2 - Québec           12 - Calgary")
+    print("3 - Ottawa           13 - Vancouver")
+    print("4 - Toronto          14 - Edmonton")
+    print("5 - Halifax          15 - Fort McMurray")
+    print("6 - Sept-Iles        16 - Churchill")
+    print("7 - Thunder Bay      17 - Prince George")
+    print("8 - Sandy Lake       18 - Fort Nelson")
+    print("9 - Winnipeg         19 - Whitehorse")
+    print("10 - Regina          20 - Yellowknife")
+
+
+# choose a town.
+def chooseTown():
+    townInput = None
+
+    while True:
+        try:
+            townInput = int(input("Entrez la ville :  "))
+        except ValueError:
+            printError()
+            continue
+
+        if townInput >= 1 and townInput <= 20:
+                return townInput
+
+        printError()
+
+
+# Choose a vehicle.
+def chooseVehicle():
+    vehicles = ["voiture", "pick-up", "fourgon"]
+
+    print("\nListe des types de véhicules disponibles :")
+    for myVehicle in vehicles:
+        print(myVehicle)
+
+    while True:
+        vehicle = input("Entrez un véhicule  :  ")
+
+        for myVehicle in vehicles:
+            if myVehicle == vehicle:
+                return myVehicle
+
+        printError()
+
+
+# Read file.
+def setFile():
+
+    fileName = None
+    graph = None
+
+    while True:
+        try:
+            fileName = input(
+                "Entrez le nom du fichier de la carte (ex: nomFichier.txt) :  ")
+            graph = creerGraph(fileName)
+        except:
+            printError()
+            continue
+
+        return graph
+
+
+# To be printed for invalid entries.
+def printError():
+    print("\nEntrée invalide! \nRéessayez avec une entrée valide svp ...\n")
+
+
+def main():                # Define the main function
+
+    nomFichier = None
+    typeVehicule = None
+    loop = True
+    graph = creerGraph("villes.txt")
+
+    while loop:      # Keep looping until loop == False
+        printMenu()   # Displays menu
+        choice = input("Entrez votre choix :  ")
+
+        if choice == "1":
+            print("\n", 8 * "*", "Mise à jour de la carte ", 8 * "*")
+            graph = setFile()
+            lireGraph(graph)
+
+        elif choice == "2":
+            print("\n", 6 * "*", "Configuarations pour le braquage ", 6 * "*")
+            printTowns()
+            print(
+                "\nEntrez le point de la ville où aura lieu le braquage (ex: 3 pour Ottawa)")
+            depart = chooseTown()
+            print(
+                "Entrez le point de destination après le braquage (ex: 19 pour Whitehorse)")
+            arrive = chooseTown()
+
+            typeVehicule = chooseVehicle()
+
+            print(plusCourtChemin(graph, int(depart), int(arrive), typeVehicule))
+
+        elif choice == "3":
+            print("\nAu revoir! A bientôt pour le prochain braquage!\n")
+            loop = False
+
+        else:
+            # Any input other than values 1, 2 or 3 is not allowed.
+            printError()
+
+
+main()      # Invoke the main function
