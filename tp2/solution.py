@@ -1,4 +1,8 @@
 class Solution:
+    """
+    Une classe permettant de garder une liste de mots de passe a resoudre
+    """
+
     def __init__(self, no):
         self.no = no
         self.variantes = []

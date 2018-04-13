@@ -1,5 +1,9 @@
 class Automate(object):
-    """docstring for Automate."""
+    """Une class automate qui permet de lire des solutions
+       on peut y ajouter une regle
+       on peut aussi resoudre avec la fonction solve et un mot de passe
+
+    """
     END = -1
     NOT_FOUND = 0
     START = ""
