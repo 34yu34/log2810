@@ -66,7 +66,7 @@ def menu(erreur):
 
 def VariantesFichiers():
     ######################################################################
-    #    Fonction d'impressin des noms de fichiers de variantes
+    #    Fonction d'impression des noms de fichiers de variantes
     ######################################################################
     print("\nliste de fichiers de variantes disponible \n")
     print("=> variantes1.txt")
@@ -78,7 +78,7 @@ def VariantesFichiers():
 
 def reglesFichiers():
     ######################################################################
-    #    Fonction d'impressin des noms de fichiers de regles
+    #    Fonction d'impression des noms de fichiers de regles
     ######################################################################
     print("\nliste de Fichiers de regles disponible \n")
     print("=> regles1.txt")
